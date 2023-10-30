@@ -1,85 +1,68 @@
-import React, { useState } from "react";
-import "./StudentForm.css";
+import React, {useState} from "react";
+import './StudentForm.css'
 import dateFormatting from "../../utils/dateUtils";
 
-function StudentForm(props) {
-  const [enteredStudentName, setEnteredStudentName] = useState("");
-  const [enteredCourseName, setEnteredCourseName] = useState("");
-  const [enteredStartDate, setEnteredStartDate] = useState("");
+function StudentForm(props){
 
-  const studentNameChangeHandler = (event) => {
-    setEnteredStudentName(event.target.value);
-  };
+    const [enteredStudentName, setEnteredStudentName] = useState('');
+    const [enteredCourseName, setEnteredCourseName] = useState('');
+    const [enteredStartDate, setEnteredStartDate] = useState('');
 
-  const courseNameChangeHandler = (event) => {
-    console.log("This is course event name: " + event.target.value);
-    console.log("This is props: " + JSON.stringify(props));
-    let eneteredCourse = event.target.value;
-    setEnteredCourseName(eneteredCourse);
-    setEnteredStartDate(
-      dateFormatting(props.courses[eneteredCourse].startDate)
-    );
-  };
+    const studentNameChangeHandler = (event) => {
+        setEnteredStudentName(event.target.value);
+    }
 
-  const submitHandler = (event) => {
-    event.prevetDefault();
-
-    const registeredStudent = {
-        studentName: enteredStudentName,
-        course: enteredCourseName,
-        data: enteredStartDate,
+    const courseNameChangeHandler = (event) => {
+        let enteredCourse = event.target.value;
+        setEnteredCourseName(enteredCourse);
+        setEnteredStartDate(dateFormatting(props.courses[enteredCourse].startDate));
     };
 
-    setEnteredStudentName("");
-    setEnteredCourseName("");
-    setEnteredStartDate("");
-  }
+    const submitHandler = (event) => {
+        event.preventDefault();
 
-  console.log("Componenet StudentForm has rendered");
-  return (
-    <form>
-      <div className="new-registration__contorls">
-        <div className="new-registration__control">
-          <label>Student Name</label>
-          <input
-            value={enteredStudentName}
-            type="text"
-            onChange={studentNameChangeHandler}
-            required
-          ></input>
-        </div>
+        const registeredStudent = {
+            studentName: enteredStudentName,
+            course: enteredCourseName,
+            date: enteredStartDate
+        }
+        setEnteredStudentName('');
+        setEnteredCourseName('');
+        setEnteredStartDate('');
+        props.onSaveRegisteredStudentData(registeredStudent);
+    }
 
-        <div className="new-registration__control">
-          <label>Course Name</label>
-          <select
-            className="course-selection"
-            defaultValue=""
-            required
-            onChange={courseNameChangeHandler}
-            value={enteredCourseName}
-          >
-            <option value="" disabled>
-              Please Choose A Course
-            </option>
-            <option value="fullstack">Fullstack Course</option>
-            <option value="qa">QA Course</option>
-            <option value="cyber">Cyber Course</option>
-            <option value="product">Product Management Course</option>
-          </select>
-        </div>
+    return(
+        <form onSubmit={submitHandler}>
+            <div className="new-registration__contorls">
+                <div className="new-registration__control">
+                    <label>Student Name</label>
+                    <input type="text" required onChange={studentNameChangeHandler} value={enteredStudentName}/>
+                </div>
 
-        <div className="new-registration__control">
-          <label>Course Start Date</label>
-          <input type="date" disabled value={enteredStartDate}></input>
-        </div>
-        <br></br>
-        <div className="ew-registration__actions">
-          <button type="button">Cancel</button>
-          <button type="submit">Register Student</button>
-        </div>
-      </div>
-    </form>
-  );
+                <div className="new-registration__control">
+                    <label>Course Name</label>
+                    <select className="course-selection" defaultValue='' required onChange={courseNameChangeHandler} value={enteredCourseName}>
+                        <option value='' disabled>Please Choose A Course</option>
+                        <option value='fullstack'>Fullstack Course</option>
+                        <option value='qa'>QA Course</option>
+                        <option value='cyber'>Cyber Course</option>
+                        <option value='product'>Product Management Course</option>
+                    </select>
+                </div>
+
+                <div className="new-registration__control">
+                    <label>Course Start Date</label>
+                    <input type="date" value={enteredStartDate} disabled/>
+                </div>
+            </div>
+            <br></br>
+            <div className="ew-registration__actions">
+                <button type="button" onClick={props.onCancel}>Cancel</button>
+                <button type="submit">Register Student</button>
+            </div>
+        </form>
+    )
 }
 
 export default StudentForm;
