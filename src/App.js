@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import './App.css';
 import RegisteredStudent from "./components/studentRegistrations/RegisteredStudent";
 import NewStudent from "./components/newStudent/NewStudent";
 import Registrations from "./components/studentRegistrations/Registrations";
